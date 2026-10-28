@@ -34,13 +34,53 @@ class ParsedWorkbook:
     warnings: tuple[str, ...]
 
 
-def _select_sheet(sheetnames: list[str], spec: FlowSpec, *, allow_fallback: bool) -> str:
+def _select_sheet(
+    sheetnames: list[str],
+    spec: FlowSpec,
+    *,
+    allow_fallback: bool,
+) -> str:
+    # Correspondance exacte en priorité
     if spec.sheet_name in sheetnames:
         return spec.sheet_name
+
+    # Flexibilité uniquement pour Entrée et Passage
+    flexible_sheets = {
+        "RDR56REBRE_FR",
+        "RDR56REBSL_FR",
+    }
+
+    def normalize_sheet(name: str) -> str:
+        return "".join(
+            char.upper()
+            for char in name
+            if char.isalnum()
+        )
+
+    if spec.sheet_name in flexible_sheets:
+        target = normalize_sheet(spec.sheet_name)
+
+        candidates = [
+            name for name in sheetnames
+            if normalize_sheet(name).startswith(target)
+        ]
+
+        if len(candidates) == 1:
+            return candidates[0]
+
+        if len(candidates) > 1:
+            raise StructureError(
+                f"Plusieurs feuilles correspondent à "
+                f"{spec.sheet_name!r} : {candidates}"
+            )
+
+    # Conserver le comportement existant des autres flux
     if allow_fallback and sheetnames:
         return sheetnames[0]
+
     raise StructureError(
-        f"Feuille {spec.sheet_name!r} absente (feuilles={sheetnames})."
+        f"Feuille {spec.sheet_name!r} absente "
+        f"(feuilles disponibles : {sheetnames})."
     )
 
 

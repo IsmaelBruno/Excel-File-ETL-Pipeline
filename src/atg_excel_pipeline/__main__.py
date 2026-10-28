@@ -20,7 +20,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--version", action="version", version=__version__)
     sub = parser.add_subparsers(dest="command")
     sub.add_parser("check", help="Vérifie la configuration (aucun secret affiché).")
-    sub.add_parser("init-db", help="Crée les tables atg_excel_* si absentes.")
+    sub.add_parser("init-db", help="Crée les tables excel_* si absentes.")
     sub.add_parser("scan-once", help="Parcourt Entrée/Sortie et charge PostgreSQL.")
     process = sub.add_parser("process", help="Traite un fichier puis charge PostgreSQL.")
     process.add_argument("fichier")
@@ -71,7 +71,7 @@ def _engine_and_log():
 
 def cmd_init_db() -> int:
     settings, engine = _engine_and_log()
-    print("Tables atg_excel_* prêtes.")
+    print("Tables excel_* prêtes.")
     engine.dispose()
     return 0
 

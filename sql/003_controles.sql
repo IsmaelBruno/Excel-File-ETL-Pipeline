@@ -6,8 +6,8 @@ SELECT a.source_name AS fichier_a,
        a.date_max AS a_max,
        b.date_min AS b_min,
        b.date_max AS b_max
-FROM atg_excel_files a
-JOIN atg_excel_files b
+FROM excel_files a
+JOIN excel_files b
   ON a.flow = b.flow
  AND a.status = 'success'
  AND b.status = 'success'

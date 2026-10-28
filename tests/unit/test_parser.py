@@ -59,7 +59,7 @@ def test_parse_et_transforme_entree(tmp_path: Path) -> None:
     assert row["n_bon"] == "12345"
     assert row["ege"] == 12.5
     assert row["date_principale"] == date(2026, 9, 1)
-    assert row["date_c30"] is None
+    assert row["date_c30"] == "ABESPTOTAL"
     assert transformed.quality.conversion_errors >= 1
     assert row["heure"] == time(12, 0, 47)
 

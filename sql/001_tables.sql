@@ -1,5 +1,5 @@
 -- Tables Excel JDE. Ne pas modifier tank_measurements / file_audit.
-CREATE TABLE IF NOT EXISTS atg_excel_files (
+CREATE TABLE IF NOT EXISTS excel_files (
     id SERIAL PRIMARY KEY,
     source_name VARCHAR(512) NOT NULL,
     source_path VARCHAR(1024) NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS atg_excel_files (
     processed_at TIMESTAMPTZ NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS atg_excel_entree (
+CREATE TABLE IF NOT EXISTS excel_entree (
     id SERIAL PRIMARY KEY,
     source_name VARCHAR(512) NOT NULL,
     source_row INTEGER NOT NULL,
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS atg_excel_entree (
     UNIQUE (source_name, source_row)
 );
 
-CREATE TABLE IF NOT EXISTS atg_excel_sortie (
+CREATE TABLE IF NOT EXISTS excel_sortie (
     id SERIAL PRIMARY KEY,
     source_name VARCHAR(512) NOT NULL,
     source_row INTEGER NOT NULL,
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS atg_excel_sortie (
     UNIQUE (source_name, source_row)
 );
 
-CREATE TABLE IF NOT EXISTS atg_excel_rejets (
+CREATE TABLE IF NOT EXISTS excel_rejets (
     id SERIAL PRIMARY KEY,
     source_name VARCHAR(512) NOT NULL,
     source_row INTEGER NOT NULL,
@@ -94,6 +94,6 @@ CREATE TABLE IF NOT EXISTS atg_excel_rejets (
     UNIQUE (source_name, source_row, flow)
 );
 
-CREATE INDEX IF NOT EXISTS idx_atg_excel_entree_date ON atg_excel_entree (date_principale);
-CREATE INDEX IF NOT EXISTS idx_atg_excel_sortie_date ON atg_excel_sortie (date_livraison);
-CREATE INDEX IF NOT EXISTS idx_atg_excel_files_name ON atg_excel_files (source_name, status);
+CREATE INDEX IF NOT EXISTS idx_excel_entree_date ON excel_entree (date_principale);
+CREATE INDEX IF NOT EXISTS idx_excel_sortie_date ON excel_sortie (date_livraison);
+CREATE INDEX IF NOT EXISTS idx_excel_files_name ON excel_files (source_name, status);

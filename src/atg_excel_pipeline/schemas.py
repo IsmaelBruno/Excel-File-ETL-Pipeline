@@ -67,7 +67,7 @@ ENTREE_COLUMNS: tuple[ColumnSpec, ...] = (
     ColumnSpec(22, "DEP", "dep", FieldType.TEXTE, aliases=("A3",)),
     ColumnSpec(23, "DIST", "dist", FieldType.TEXTE, aliases=("A4",)),
     ColumnSpec(27, "Perte Déch", "perte_dech", FieldType.NUMERIQUE),
-    ColumnSpec(30, "Date", "date_c30", FieldType.DATE, occurrence=2),
+    ColumnSpec(30, "Date", "date_c30", FieldType.TEXTE, occurrence=2),
     ColumnSpec(31, "N°", "heure", FieldType.HEURE, occurrence=2),
 )
 

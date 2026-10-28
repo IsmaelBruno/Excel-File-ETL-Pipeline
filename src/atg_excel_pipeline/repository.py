@@ -1,4 +1,4 @@
-"""Tables atg_excel_* et chargement idempotent par nom de fichier."""
+"""Tables excel_* et chargement idempotent par nom de fichier."""
 
 from __future__ import annotations
 
@@ -27,10 +27,10 @@ from sqlalchemy.engine import Engine
 from atg_excel_pipeline.schemas import ENTREE_COLUMNS, SORTIE_COLUMNS, FieldType, Flow
 from atg_excel_pipeline.transformer import TransformedFile, field_names
 
-ENTREE_TABLE = "atg_excel_entree"
-SORTIE_TABLE = "atg_excel_sortie"
-REJECT_TABLE = "atg_excel_rejets"
-FILES_TABLE = "atg_excel_files"
+ENTREE_TABLE = "excel_entree"
+SORTIE_TABLE = "excel_sortie"
+REJECT_TABLE = "excel_rejets"
+FILES_TABLE = "excel_files"
 
 STATUS_SUCCESS = "success"
 STATUS_FAILED = "failed"
@@ -75,7 +75,7 @@ def _reject_table(metadata: MetaData) -> Table:
         Column("flow", String(16), nullable=False),
         Column("motif", String(64), nullable=False),
         Column("raw_json", Text),
-        UniqueConstraint("source_name", "source_row", "flow", name="uq_atg_excel_rejets"),
+        UniqueConstraint("source_name", "source_row", "flow", name="uq_excel_rejets"),
     )
 
 

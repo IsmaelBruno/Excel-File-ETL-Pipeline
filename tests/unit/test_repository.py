@@ -58,7 +58,7 @@ def test_remplace_lignes_du_meme_nom(tmp_path: Path) -> None:
     replace_file_payload(engine, second, source_path=second.parsed.path, file_sha256="b" * 64)
 
     tables = metadata_with_tables()
-    entree = tables.tables["atg_excel_entree"]
+    entree = tables.tables["excel_entree"]
     with engine.connect() as connection:
         rows = connection.execute(select(entree.c.n_bon)).fetchall()
     assert [r[0] for r in rows] == ["222"]
@@ -73,7 +73,7 @@ def test_fichier_nom_different_s_ajoute(tmp_path: Path) -> None:
     replace_file_payload(engine, a, source_path=a.parsed.path, file_sha256="a" * 64)
     replace_file_payload(engine, b, source_path=b.parsed.path, file_sha256="c" * 64)
     tables = metadata_with_tables()
-    entree = tables.tables["atg_excel_entree"]
+    entree = tables.tables["excel_entree"]
     with engine.connect() as connection:
         rows = connection.execute(select(entree.c.source_name, entree.c.n_bon)).fetchall()
     assert len(rows) == 2
