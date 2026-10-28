@@ -1,0 +1,2 @@
+[console_scripts]
+atg-excel-pipeline = atg_excel_pipeline.__main__:main

@@ -1,48 +1,43 @@
 # ATG_Excel_Pipeline
 
-Automatise le chargement des fichiers Excel JDE **Entrée** (réceptions,
-feuille `RDR56REBRE_FR`) et **Sortie** (livraisons, feuille `RDR56REBSL_FR`)
-vers PostgreSQL, à la place des deux requêtes Power Query qui ne lisaient
-que le fichier le plus récent.
+ETL des fichiers Excel JDE **Entrées** (`RDR56REBRE_FR`) et **Passage**
+(`RDR56REBSL_FR`) vers PostgreSQL.
 
-Power BI lira les tables / vues `atg_excel_*`. Les tables ATG existantes
-(`tank_measurements`, `file_audit`) ne sont **pas** modifiées.
+La copie `L:` → `D:\SBM\BI_SBM` est un **autre script**. Ce projet ne fait
+qu’extraire, transformer et charger. `EJE 2026.xlsx` est hors périmètre.
 
-`Entrée_ATG`, `Sortie_ATG` et `niveau_diff` ne sont **pas** calculés depuis
-Excel : ils relèvent d'une vue de jointure ultérieure avec ATG.
+Power BI lira les tables `atg_excel_entree`, `atg_excel_sortie`,
+`atg_excel_rejets`, `atg_excel_files`. Les tables ATG
+(`tank_measurements`, `file_audit`) ne sont pas modifiées.
 
-## État
+## Lancer
 
-Étape en cours : **échafaudage** (config, spécification des colonnes, liaison
-d'en-têtes, tests unitaires). Parser, surveillance, chargement SQL : non
-implémentés.
-
-## Chemins
-
-Les dossiers se lisent dans `.env` (`ENTREE_DIR`, `SORTIE_DIR`), jamais en dur.
-
-- Production déclarée : `L:\Chris\2026\BI\Entrée` et `\Sortie`.
-- Requêtes M actuelles : `D:\SBM\BI_SBM\Entrée` et `\Sortie`.
-
-Copier `.env.example` vers `.env`. Ne jamais y coller le `.env` de
-`ATG_SBM_Data_pipeline` (secrets réels). Faire tourner le mot de passe
-PostgreSQL si cette archive a circulé.
-
-## Prérequis
-
-Python 3.11+ (Dockerfile du projet ATG existant : 3.12). Windows / PowerShell.
-
-```text
-python -m pip install -r requirements-dev.txt
-python -m pytest
-python -m atg_excel_pipeline check
+```powershell
+cd D:\SBM\Excel_Input_pipeline
+.\.venv\Scripts\Activate.ps1
+python -m pip install -e ".[dev]"
+copy .env.example .env
 ```
 
-## Conventions reprises de ATG_SBM_Data_pipeline
+Dans `.env` : `ENTREE_DIR=D:\SBM\BI_SBM\Entrée`, `SORTIE_DIR=D:\SBM\BI_SBM\Sortie`,
+et les variables PostgreSQL (`DB_PASSWORD` ou `DB_PASSWORD_FILE`).
 
-`get_secret`, SHA-256 par blocs de 1 Mo, journal rotatif, Settings **sans**
-lecture d'environnement à l'import du module.
+```powershell
+python -m pytest
+python -m atg_excel_pipeline check
+python -m atg_excel_pipeline init-db
+python -m atg_excel_pipeline scan-once
+python -m atg_excel_pipeline process "D:\SBM\BI_SBM\Entrée\Entrées Sep-26 JdE.xlsx"
+```
 
-## Sécurité
+- `scan-once` : tous les `Entrées*.xlsx` et `Passage*.xlsx` (ignore `EJE*`, `~$*`).
+- Même nom redéposé : les lignes de ce fichier sont **remplacées**.
+- Nom différent : les lignes **s’ajoutent**.
+- Même contenu (SHA-256) déjà `success` : ignoré.
 
-Aucune valeur de secret n'est journalisée ni affichée par `check`.
+`run` (watchdog) n’est pas dans le périmètre ETL.
+
+## Hors Excel
+
+`Entrée_ATG`, `Sortie_ATG`, `niveau_diff` : vue SQL ultérieure avec ATG.
+`Entrées Mai-21 JdE.xlsx` : structure hors modèle → rejet structurel.

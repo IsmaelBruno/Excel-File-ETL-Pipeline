@@ -1,0 +1,17 @@
+README.md
+pyproject.toml
+src/atg_excel_pipeline/__init__.py
+src/atg_excel_pipeline/__main__.py
+src/atg_excel_pipeline/config.py
+src/atg_excel_pipeline/headers.py
+src/atg_excel_pipeline/integrity.py
+src/atg_excel_pipeline/logging_config.py
+src/atg_excel_pipeline/quality.py
+src/atg_excel_pipeline/schemas.py
+src/atg_excel_pipeline/secrets.py
+src/atg_excel_pipeline.egg-info/PKG-INFO
+src/atg_excel_pipeline.egg-info/SOURCES.txt
+src/atg_excel_pipeline.egg-info/dependency_links.txt
+src/atg_excel_pipeline.egg-info/entry_points.txt
+src/atg_excel_pipeline.egg-info/requires.txt
+src/atg_excel_pipeline.egg-info/top_level.txt

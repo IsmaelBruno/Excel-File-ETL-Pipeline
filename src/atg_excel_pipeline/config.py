@@ -97,6 +97,18 @@ class Settings:
 
         return get_secret("DB_PASSWORD")
 
+    def missing_db_keys(self) -> list[str]:
+        missing: list[str] = []
+        if not self.db_host:
+            missing.append("DB_HOST")
+        if not self.db_name:
+            missing.append("DB_NAME")
+        if not self.db_user:
+            missing.append("DB_USER")
+        if not self.db_password():
+            missing.append("DB_PASSWORD or DB_PASSWORD_FILE")
+        return missing
+
 
 def load_settings(*, dotenv_path: Path | None = None, environ: dict[str, str] | None = None) -> Settings:
     """Charge éventuellement un .env puis instancie Settings.
