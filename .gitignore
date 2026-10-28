@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+.ruff_cache/
+
+# Secrets
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# Données et journaux locaux
+data/raw/
+data/staging/
+data/rejected/
+logs/*.log
+
+# Copie de travail de l'ancien projet (ne pas versionner)
+_ref/
+_audit_etape_b.py

@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "atg-excel-pipeline"
+version = "0.2.0"
+description = "Pipeline Excel JDE Entrée/Sortie vers PostgreSQL pour le rapprochement ATG"
+requires-python = ">=3.11"
+readme = "README.md"
+dependencies = [
+    "polars==1.33.1",
+    "openpyxl==3.1.5",
+    "pyxlsb==1.0.10",
+    "SQLAlchemy==2.0.43",
+    "psycopg[binary]==3.2.10",
+    "python-dotenv==1.1.1",
+    "watchdog==6.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==8.4.2",
+    "ruff==0.13.0",
+]
+
+[project.scripts]
+atg-excel-pipeline = "atg_excel_pipeline.__main__:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
