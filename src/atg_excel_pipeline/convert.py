@@ -170,7 +170,54 @@ def _time_from_fraction(fraction: float) -> time:
     return time(hours, minutes, seconds)
 
 
+
 def parse_time_sortie(value: object) -> Converted:
+    """Parse les heures de sortie sous forme Excel, HH:MM[:SS] ou HHMMSS."""
+    if is_blank(value):
+        return Converted(None)
+
+    if is_excel_error(value):
+        return Converted(None, "cell")
+
+    if isinstance(value, time):
+        return Converted(value.replace(microsecond=0))
+
+    if isinstance(value, datetime):
+        return Converted(value.time().replace(microsecond=0))
+
+    if isinstance(value, bool):
+        return Converted(None, "conversion")
+
+    if isinstance(value, (int, float)):
+        number = float(value)
+
+        # Fraction de journée Excel : 0 <= valeur < 1
+        if 0 <= number < 1:
+            return Converted(_time_from_fraction(number))
+
+        # Valeur numérique HHMMSS
+        parsed = _hhmmss_from_int(int(round(number)))
+        if parsed is None:
+            return Converted(None, "conversion")
+        return Converted(parsed)
+
+    text = str(value).strip().replace("\xa0", "").replace(" ", "")
+
+    # Formats textuels avec séparateurs
+    for fmt in ("%H:%M:%S", "%H:%M"):
+        try:
+            return Converted(datetime.strptime(text, fmt).time())
+        except ValueError:
+            continue
+
+    # Format textuel HHMMSS, avec zéros initiaux éventuels
+    if text.isdigit():
+        parsed = _hhmmss_from_int(int(text))
+        if parsed is not None:
+            return Converted(parsed)
+
+    return Converted(None, "conversion")
+
     """HHMMSS numérique arrondi, complété à 6 chiffres (comportement M)."""
 
     if is_blank(value):

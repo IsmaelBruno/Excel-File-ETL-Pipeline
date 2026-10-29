@@ -118,9 +118,9 @@ SORTIE_COLUMNS: tuple[ColumnSpec, ...] = (
     ColumnSpec(21, "CLIENT", "client_c21", FieldType.TEXTE, occurrence=2),
     ColumnSpec(22, "SITE Dest", "site_dest", FieldType.TEXTE),
     ColumnSpec(25, "TCDE", "tcde", FieldType.TEXTE),
-    ColumnSpec(27, "COMM", "comm", FieldType.ENTIER),
+    ColumnSpec(27, "COMM", "comm", FieldType.ENTIER, aliases=("Ctrl @ BST",),),
     ColumnSpec(29, "N° OT", "n_ot", FieldType.ENTIER),
-    ColumnSpec(30, "HHMMSS", "heure", FieldType.HEURE),
+    ColumnSpec(30, "HHMMSS", "heure", FieldType.HEURE, required=True, aliases=("Dépôt chargeur",),),
 )
 
 SORTIE_DROPPED = (12, 14, 23, 24, 26, 28, 31, 32, 33, 34, 35, 36, 37, 38)
